@@ -1,8 +1,10 @@
 (() => {
-  /* ===== 素材路徑：在 js/config.js 修改 ===== */
+  /* ===== 素材設定：在 js/config.js 修改 ===== */
   const CONF = window.TABATA_CONFIG || {};
-  const VIDEO_SRC = CONF.workoutVideo || '';
-  const REST_IMAGE = CONF.restImage || '';
+  const MODES = ['day', 'night'];
+  let mode = CONF.defaultMode === 'night' ? 'night' : 'day';
+  try { const m = localStorage.getItem('tabata.mode'); if (MODES.includes(m)) mode = m; } catch (e) {}
+  const media = () => CONF[mode] || {};
 
   /* ===== 固定課表：準備 10 秒 + 8 ×（運動 20 秒 / 休息 10 秒），最後一回合不休息 = 4:00 ===== */
   const PREP = 10, WORK = 20, REST = 10, ROUNDS = 8;
@@ -110,11 +112,11 @@
 
   /* ===== 圓圈中央的影片 / 靜態圖 ===== */
   const vid = $('#vid'), still = $('#still'), ph = $('#ph');
-  let videoOk = !!VIDEO_SRC, imageOk = !!REST_IMAGE;
+  let videoOk = false, imageOk = false;
   const curType = () => (S.active ? PLAN[S.idx].type : 'work');
   const mediaErr = { video: '', image: '' };
-  vid.addEventListener('error', () => { videoOk = false; diagnose('video', VIDEO_SRC); });
-  still.addEventListener('error', () => { imageOk = false; diagnose('image', REST_IMAGE); });
+  vid.addEventListener('error', () => { if (!vid.getAttribute('src')) return; videoOk = false; diagnose('video', media().workoutVideo); });
+  still.addEventListener('error', () => { if (!still.getAttribute('src')) return; imageOk = false; diagnose('image', media().restImage); });
   // 找出素材載入失敗的原因，顯示在圓圈中央
   async function diagnose(kind, src) {
     let msg = '無法播放';
@@ -132,12 +134,33 @@
     } catch (e) {
       msg = location.protocol === 'file:' ? '請用 http/https 網址開啟，或檢查檔案位置' : '無法讀取檔案';
     }
+    if (src !== (kind === 'video' ? media().workoutVideo : media().restImage)) return; // 已切換模式
     mediaErr[kind] = `${msg}\n${src}`;
     console.warn('[Tabata] ' + kind + ' 載入失敗：', msg, src);
     if (S.active) setMedia(curType());
   }
-  if (VIDEO_SRC) vid.src = VIDEO_SRC;
-  if (REST_IMAGE) still.src = REST_IMAGE;
+  function loadMedia() {
+    const m = media();
+    mediaErr.video = mediaErr.image = '';
+    videoOk = !!m.workoutVideo; imageOk = !!m.restImage;
+    if (m.workoutVideo) vid.src = m.workoutVideo; else { vid.removeAttribute('src'); vid.load(); }
+    if (m.restImage) still.src = m.restImage; else still.removeAttribute('src');
+    if (S.active) setMedia(curType());
+  }
+
+  /* ===== Day / Night 切換 ===== */
+  function applyMode() {
+    document.documentElement.dataset.mode = mode;
+    document.querySelectorAll('.mode-label').forEach(el => { el.textContent = mode === 'day' ? 'DAY' : 'NIGHT'; });
+    document.querySelectorAll('[data-mode-btn]').forEach(b => b.setAttribute('aria-label', mode === 'day' ? '目前 Day，切換到 Night' : '目前 Night，切換到 Day'));
+    const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = mode === 'day' ? '#d6ff1f' : '#ff36b8';
+    loadMedia();
+  }
+  document.querySelectorAll('[data-mode-btn]').forEach(b => b.addEventListener('click', () => {
+    mode = mode === 'day' ? 'night' : 'day';
+    try { localStorage.setItem('tabata.mode', mode); } catch (e) {}
+    applyMode();
+  }));
   const ICON_PLAY = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 4.5v15l12-7.5z"/></svg>';
   const ICON_IMG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M21 16l-5-5-8 8"/></svg>';
   function setMedia(type) {
@@ -285,5 +308,6 @@
     if (e.code === 'ArrowRight') skip();
   });
 
+  applyMode();
   show('home');
 })();

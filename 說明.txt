@@ -1,25 +1,27 @@
 Tabata 計時器：上傳與更換素材
 
 【資料夾結構】
-index.html              頁面
-css/style.css           樣式
-js/config.js            素材路徑設定（換影片、圖片改這裡）
-js/app.js               計時程式
-assets/video/workout.mp4    運動影片
-assets/images/rest.jpg      休息圖片
+index.html                    頁面
+css/style.css                 樣式
+js/config.js                  素材路徑設定（換影片、圖片改這裡）
+js/app.js                     計時程式
+assets/day/workout.mp4        Day 運動影片
+assets/day/rest.jpg           Day 休息圖片
+assets/night/workout.mp4      Night 運動影片
+assets/night/rest.jpg         Night 休息圖片
 
-【上傳】
-把整個資料夾（保持結構）上傳到網站空間，打開 index.html 即可。
-語音、螢幕常亮在 https 網址下效果最好。
+【Day / Night】
+右上角按鈕切換。Day 為螢光黃、Night 為螢光粉，各自使用自己的影片與圖片。
+瀏覽器會記住上次的選擇；第一次打開的模式在 js/config.js 的 defaultMode 設定。
+
+【上傳到 GitHub】
+把這個資料夾「裡面的所有東西」一起拖進 repo 上傳（保持資料夾結構），同名檔案會被覆蓋。
+上傳後等 1–2 分鐘，按 Ctrl+F5 重新整理。
 
 【更換素材】
-方法一：用相同檔名覆蓋 assets 裡的檔案。
-方法二：把新檔案放進 assets，再到 js/config.js 改路徑：
-  workoutVideo: 'assets/video/新影片.mp4'
-  restImage:    'assets/images/新圖片.jpg'
-也可以直接填完整網址。
+方法一：用相同檔名覆蓋 assets/day 或 assets/night 裡的檔案。
+方法二：把新檔案放進 assets，再到 js/config.js 改對應的路徑，也可以填完整網址。
 
 【影片建議】
 直式（例如 720×1280）、mp4（H.264）、5–15 秒、2–5MB 以內。
-影片會靜音循環播放，原本的聲音不會出來。
-如果換了檔案但畫面沒變，請清除瀏覽器快取或重新整理。
+影片會靜音循環播放。若素材載入失敗，圓圈中央會用紅字顯示原因。

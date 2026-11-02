@@ -16,7 +16,7 @@
 
   <!-- ============ 首頁 ============ -->
   <section class="screen home" id="home">
-    <div class="home-top"><span>INTERVAL</span><span>4 MIN</span></div>
+    <div class="home-top"><span>INTERVAL · 4 MIN</span><button type="button" class="mode-btn" data-mode-btn aria-label="切換 Day / Night"><svg class="ico-day" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg><svg class="ico-night" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg><span class="mode-label">DAY</span></button></div>
     <div class="hero">
       <h1>Tabata</h1>
       <div class="formula">20 <em>/</em> 10 <em>×</em> 8</div>
@@ -41,10 +41,13 @@
         <div class="phase" id="phase">Ready<small>準備</small></div>
         <div class="next">下一個：<span id="next">運動 20 秒</span></div>
       </div>
+      <div class="t-actions">
+      <button type="button" class="round-btn" data-mode-btn aria-label="切換 Day / Night"><svg class="ico-day" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg><svg class="ico-night" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button>
       <button type="button" class="round-btn" id="btn-mute" aria-label="靜音">
         <svg id="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
         <svg id="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
       </button>
+      </div>
     </div>
 
     <div class="stage">

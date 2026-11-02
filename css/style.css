@@ -13,6 +13,7 @@
   color-scheme:light;
 }
 html,body{height:100%}
+:root[data-mode="night"]{--volt:#ff36b8}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-body);margin:0;overflow-x:hidden;-webkit-tap-highlight-color:transparent;transition:background-color .35s,color .35s}
 body[data-phase="prep"]{--bg:var(--ink);--fg:var(--volt)}
 body[data-phase="work"]{--bg:var(--volt);--fg:var(--ink)}
@@ -30,7 +31,13 @@ button:focus-visible{outline:3px solid currentColor;outline-offset:3px}
 /* ---------- 首頁 ---------- */
 .home{gap:22px}
 .home-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-display);font-weight:800;letter-spacing:.14em;font-size:.95rem}
-.home-top span:last-child{background:var(--ink);color:var(--volt);padding:4px 10px;border-radius:999px;letter-spacing:.1em}
+.mode-btn{height:40px;padding:0 14px 0 10px;border-radius:999px;border:2px solid var(--ink);background:var(--ink);color:var(--volt);
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-weight:800;font-size:.95rem;letter-spacing:.12em}
+.mode-btn svg{width:18px;height:18px}
+.t-actions{display:flex;gap:8px;flex:none}
+.ico-night{display:none}
+:root[data-mode="night"] .ico-day{display:none}
+:root[data-mode="night"] .ico-night{display:block}
 .hero{margin-top:4vh}
 .hero h1{margin:0;font-family:var(--font-display);font-style:italic;font-weight:900;font-size:clamp(3.6rem,22vw,8rem);line-height:.85;white-space:nowrap;letter-spacing:-.01em;text-transform:uppercase}
 .hero .formula{margin-top:14px;font-family:var(--font-display);font-style:italic;font-weight:800;font-size:clamp(1.6rem,8vw,2.4rem);line-height:1}
