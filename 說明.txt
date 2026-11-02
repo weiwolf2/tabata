@@ -1,0 +1,25 @@
+Tabata 計時器：上傳與更換素材
+
+【資料夾結構】
+index.html              頁面
+css/style.css           樣式
+js/config.js            素材路徑設定（換影片、圖片改這裡）
+js/app.js               計時程式
+assets/video/workout.mp4    運動影片
+assets/images/rest.jpg      休息圖片
+
+【上傳】
+把整個資料夾（保持結構）上傳到網站空間，打開 index.html 即可。
+語音、螢幕常亮在 https 網址下效果最好。
+
+【更換素材】
+方法一：用相同檔名覆蓋 assets 裡的檔案。
+方法二：把新檔案放進 assets，再到 js/config.js 改路徑：
+  workoutVideo: 'assets/video/新影片.mp4'
+  restImage:    'assets/images/新圖片.jpg'
+也可以直接填完整網址。
+
+【影片建議】
+直式（例如 720×1280）、mp4（H.264）、5–15 秒、2–5MB 以內。
+影片會靜音循環播放，原本的聲音不會出來。
+如果換了檔案但畫面沒變，請清除瀏覽器快取或重新整理。

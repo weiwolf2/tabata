@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d6ff1f">
+<title>Tabata 計時器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800;1,900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<main class="app">
+
+  <!-- ============ 首頁 ============ -->
+  <section class="screen home" id="home">
+    <div class="home-top"><span>INTERVAL</span><span>4 MIN</span></div>
+    <div class="hero">
+      <h1>Tabata</h1>
+      <div class="formula">20 <em>/</em> 10 <em>×</em> 8</div>
+      <p>20 秒全力運動、10 秒休息，重複 8 回合。</p>
+    </div>
+    <div class="bar" aria-hidden="true"><div class="seg" id="home-bar"></div></div>
+    <div class="program">
+      <div class="prog-row"><span class="k">準備<small>開始前</small></span><span class="v">10<small>秒</small></span></div>
+      <div class="prog-row"><span class="k">運動<small>× 8 回合</small></span><span class="v">20<small>秒</small></span></div>
+      <div class="prog-row"><span class="k">休息<small>× 7 次</small></span><span class="v">10<small>秒</small></span></div>
+      <div class="prog-row total"><span class="k">總長</span><span class="v">04:00</span></div>
+    </div>
+    <button type="button" class="go" id="btn-start">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>開始
+    </button>
+  </section>
+
+  <!-- ============ 計時 ============ -->
+  <section class="screen timer" id="timer" hidden>
+    <div class="t-top">
+      <div>
+        <div class="phase" id="phase">Ready<small>準備</small></div>
+        <div class="next">下一個：<span id="next">運動 20 秒</span></div>
+      </div>
+      <button type="button" class="round-btn" id="btn-mute" aria-label="靜音">
+        <svg id="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
+        <svg id="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+      </button>
+    </div>
+
+    <div class="stage">
+      <div class="ring">
+        <svg viewBox="0 0 300 300" aria-hidden="true">
+          <circle class="track" cx="150" cy="150" r="142" fill="none" stroke-width="12"/>
+          <circle class="prog" id="prog" cx="150" cy="150" r="142" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="892.21" stroke-dashoffset="0"/>
+        </svg>
+        <div class="media">
+          <video id="vid" muted loop playsinline preload="auto" hidden></video>
+          <img id="still" alt="" hidden>
+          <div class="ph" id="ph">
+            <div class="ph-icon" id="ph-icon"></div>
+            <div class="ph-title" id="ph-title">運動影片</div>
+            <div class="ph-sub" id="ph-sub">VIDEO</div>
+          </div>
+          <div class="paused" id="paused" hidden>PAUSED</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bar" aria-hidden="true">
+      <div class="seg" id="ov-base"></div>
+      <div class="seg lit" id="ov-lit"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v" id="st-elapsed">00:00</div><div class="k">已進行</div></div>
+      <div class="stat"><div class="v" id="st-round">0/8</div><div class="k">回合</div></div>
+      <div class="stat"><div class="v" id="st-left">04:00</div><div class="k">剩餘</div></div>
+    </div>
+    <div class="controls">
+      <button type="button" class="round-btn" id="btn-close" aria-label="結束訓練">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <button type="button" class="pause" id="btn-pause" aria-label="暫停">
+        <svg id="ico-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg id="ico-play" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M8 4.5v15l12-7.5z"/></svg>
+      </button>
+      <button type="button" class="round-btn" id="btn-skip" aria-label="跳到下一段">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5l10 7-10 7zM16.5 5H19v14h-2.5z"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ 完成 ============ -->
+  <section class="screen done" id="done" hidden>
+    <div>
+      <h2>Done!</h2>
+      <p>訓練完成，記得補水、伸展。</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v" id="dn-time">04:00</div><div class="k">總時間</div></div>
+      <div class="stat"><div class="v">8</div><div class="k">回合</div></div>
+      <div class="stat"><div class="v">02:40</div><div class="k">運動時間</div></div>
+    </div>
+    <button type="button" class="go" id="btn-again" style="margin-top:0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg>再來一次
+    </button>
+    <button type="button" class="ghost" id="btn-home">回到首頁</button>
+  </section>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+    <h3 id="sheet-t">結束這次訓練？</h3>
+    <p>目前進度不會保存。</p>
+    <div class="sheet-actions">
+      <button type="button" class="ghost" id="btn-resume">繼續訓練</button>
+      <button type="button" class="btn-end" id="btn-end">結束</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
