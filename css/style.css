@@ -69,7 +69,7 @@ button:focus-visible{outline:3px solid currentColor;outline-offset:3px}
 
 .stage{flex:1;display:grid;place-items:center;min-height:0;padding-block:6px}
 .ring{position:relative;width:min(86vw,48vh,420px);width:min(86vw,48dvh,420px);aspect-ratio:1;max-width:100%}
-.ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.ring > svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
 .ring .track{stroke:currentColor;opacity:.14}
 .ring .prog{stroke:currentColor}
 .media{position:absolute;inset:9%;border-radius:50%;overflow:hidden;background:var(--ink);isolation:isolate}
@@ -79,6 +79,7 @@ body[data-phase="prep"] .media{background:#1d1d1b}
 .ph .ph-icon{width:54px;height:54px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center}
 .ph .ph-icon svg{width:22px;height:22px}
 .ph .ph-title{font-weight:700;font-size:1.05rem;color:var(--white)}
+.ph .ph-err{font-size:.68rem;line-height:1.45;color:#ff8a80;white-space:pre-line;word-break:break-all;max-width:100%}
 .ph .ph-sub{font-family:var(--font-display);font-weight:800;letter-spacing:.18em;font-size:.78rem}
 .paused{position:absolute;inset:0;display:grid;place-items:center;background:rgba(13,13,13,.6);color:var(--white);
   font-family:var(--font-display);font-style:italic;font-weight:900;font-size:1.8rem;letter-spacing:.08em;z-index:2}

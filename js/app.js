@@ -112,8 +112,30 @@
   const vid = $('#vid'), still = $('#still'), ph = $('#ph');
   let videoOk = !!VIDEO_SRC, imageOk = !!REST_IMAGE;
   const curType = () => (S.active ? PLAN[S.idx].type : 'work');
-  vid.addEventListener('error', () => { videoOk = false; if (S.active) setMedia(curType()); });
-  still.addEventListener('error', () => { imageOk = false; if (S.active) setMedia(curType()); });
+  const mediaErr = { video: '', image: '' };
+  vid.addEventListener('error', () => { videoOk = false; diagnose('video', VIDEO_SRC); });
+  still.addEventListener('error', () => { imageOk = false; diagnose('image', REST_IMAGE); });
+  // 找出素材載入失敗的原因，顯示在圓圈中央
+  async function diagnose(kind, src) {
+    let msg = '無法播放';
+    try {
+      const r = await fetch(src, { cache: 'no-store' });
+      if (r.status === 404) msg = '找不到檔案（404），請檢查路徑與大小寫';
+      else if (!r.ok) msg = `讀取失敗（${r.status}）`;
+      else {
+        const head = (await r.clone().text()).slice(0, 60);
+        const size = Number(r.headers.get('content-length')) || (await r.blob()).size;
+        if (head.startsWith('version https://git-lfs')) msg = '這是 Git LFS 指標檔，不是實際檔案';
+        else if (size < 2000) msg = `檔案只有 ${size} bytes，內容不完整`;
+        else msg = kind === 'video' ? '影片格式無法播放，請用 H.264 編碼的 mp4' : '圖片格式無法顯示';
+      }
+    } catch (e) {
+      msg = location.protocol === 'file:' ? '請用 http/https 網址開啟，或檢查檔案位置' : '無法讀取檔案';
+    }
+    mediaErr[kind] = `${msg}\n${src}`;
+    console.warn('[Tabata] ' + kind + ' 載入失敗：', msg, src);
+    if (S.active) setMedia(curType());
+  }
   if (VIDEO_SRC) vid.src = VIDEO_SRC;
   if (REST_IMAGE) still.src = REST_IMAGE;
   const ICON_PLAY = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 4.5v15l12-7.5z"/></svg>';
@@ -122,15 +144,16 @@
     if (type === 'work') {
       still.hidden = true;
       if (videoOk) { vid.hidden = false; ph.hidden = true; if (S.running) vid.play().catch(() => {}); }
-      else showPh(ICON_PLAY, '運動影片', 'VIDEO · LOOP');
+      else showPh(ICON_PLAY, '運動影片', 'VIDEO · LOOP', mediaErr.video);
     } else {
       vid.pause(); vid.hidden = true;
       if (imageOk) { still.hidden = false; ph.hidden = true; }
-      else { still.hidden = true; showPh(ICON_IMG, type === 'prep' ? '準備圖片' : '休息圖片', 'IMAGE'); }
+      else { still.hidden = true; showPh(ICON_IMG, type === 'prep' ? '準備圖片' : '休息圖片', 'IMAGE', mediaErr.image); }
     }
   }
-  function showPh(icon, title, sub) {
+  function showPh(icon, title, sub, err) {
     ph.hidden = false; $('#ph-icon').innerHTML = icon; $('#ph-title').textContent = title; $('#ph-sub').textContent = sub;
+    const e = $('#ph-err'); e.textContent = err || ''; e.hidden = !err;
   }
 
   /* ===== 計時引擎 ===== */
